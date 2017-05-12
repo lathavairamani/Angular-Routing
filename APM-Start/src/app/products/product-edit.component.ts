@@ -20,20 +20,12 @@ export class ProductEditComponent implements OnInit {
                 private messageService: MessageService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
     ngOnInit() {
-        this.activatedRoute.params.subscribe(
-          params => {
-            let id = +params['id'];
-            this.getProduct(id);
-          }
-        );
-    }
+      this.activatedRoute.data.subscribe(data => {
+        this.onProductRetrieved(data['product']);
+      });
 
-    getProduct(id: number): void {
-        this.productService.getProduct(id)
-            .subscribe(
-                (product: IProduct) => this.onProductRetrieved(product),
-                (error: any) => this.errorMessage = <any>error
-            );
+      // snapshot version - wont take the change in the url. so we go for the observable above
+      // this.onProductRetrieved(this.activatedRoute.snapshot.data['product']);
     }
 
     onProductRetrieved(product: IProduct): void {
